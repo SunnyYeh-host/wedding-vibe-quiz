@@ -246,7 +246,7 @@
         </span>
         
         <!-- 主按鈕本體 -->
-        <a href="https://www.instagram.com/sunny_yeh_wedding/" target="_blank" rel="noopener noreferrer" class="w-12 h-12 md:w-14 md:h-14 rounded-full ig-sun-gradient sun-glow-animation flex items-center justify-center text-white relative transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-brand-yellow/50" aria-label="私訊 Sunny Instagram">
+        <a href="https://ig.me/m/sunny_yeh_wedding" target="_blank" rel="noopener noreferrer" class="w-12 h-12 md:w-14 md:h-14 rounded-full ig-sun-gradient sun-glow-animation flex items-center justify-center text-white relative transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-brand-yellow/50" aria-label="私訊 Sunny Instagram">
             <!-- 太陽芒星微小點綴 (右上角) -->
             <span class="absolute top-1 right-1 w-3.5 h-3.5 text-brand-yellow drop-shadow-[0_1px_4px_rgba(245,158,11,0.8)] animate-pulse">
                 <svg fill="currentColor" viewBox="0 0 24 24">
@@ -366,11 +366,11 @@
                     "主持語氣要自然親切，捨棄典禮播音式腔調，像好友般分享",
                     "可安排輕量互動，例如隨機舉杯、溫暖的朋友祝福與桌邊問候"
                 ],
-                sunnyValue: "幫你們把流程留白設計好，讓現場不是放空，而是自然發生互動。"
+                sunnyValue: "幫你們把流程留白設計好，讓現場不是放空，而是自然發生互動."
             },
             "B": {
                 title: "溫馨情感型婚禮",
-                analysis: "你們希望婚禮有情緒、有記憶點，不只是熱鬧吃飯。你們可能很重視家人、誓詞、感謝， or 某些人生階段的轉換與沉澱。",
+                analysis: "你們希望婚禮有情緒、有記憶點，不只是熱鬧吃飯。你們可能很重視家人、誓詞、感謝，或某些人生階段的轉換與沉澱。",
                 suggestions: [
                     "規劃溫暖且深藏巧思的誓詞或真心感謝父母橋段",
                     "家人、長輩的參與互動需要提前確認舒適度，不逼迫演出",
@@ -406,7 +406,7 @@
             },
             "E": {
                 title: "穩定儀式型婚禮",
-                analysis: "你們希望婚禮保有正式感與尊崇感，也需貼心顧及長輩與家人的厚重期待。但你們同時也不希望整場婚禮顯得沉悶、傳統、 or 過於死板僵硬。",
+                analysis: "你們希望婚禮保有正式感與尊崇感，也需貼心顧及長輩與家人的厚重期待。但你們同時也不希望整場婚禮顯得沉悶、傳統、或過於死板僵硬。",
                 suggestions: [
                     "重要儀式與迎賓流程需要有條不紊，且充滿尊貴的秩序美學",
                     "尊重長輩橋段細節，但經過精心包裝，精準不拖拉",
@@ -530,29 +530,35 @@
 
             if (appState.step === -1) {
                 // ============================================
-                // INTRO LANDING SCREEN
+                // INTRO LANDING SCREEN (With Premium Cover Image)
                 // ============================================
                 container.innerHTML = `
-                    <div class="text-center space-y-8 py-4">
-                        <div class="space-y-4">
+                    <div class="text-center space-y-7 py-2 group">
+                        
+                        <!-- 🔗 專屬美式雜誌感主視覺封面圖（路徑鎖定為同目錄下的 cover.jpg） -->
+                        <div class="w-full h-[200px] sm:h-[240px] overflow-hidden rounded-xl border border-brand-sage/10 shadow-xs relative bg-brand-bg">
+                            <img src="cover.jpg" alt="BE YOUR SUN Wedding Atmosphere" class="w-full h-full object-cover transform group-hover:scale-[1.02] transition-transform duration-700" onerror="this.style.display='none'; this.parentNode.innerHTML='<div class=\'w-full h-full flex items-center justify-center text-xs text-brand-sage/40 tracking-widest italic font-serif\'>Please upload cover.jpg to GitHub directory</div>';">
+                        </div>
+
+                        <div class="space-y-3.5">
                             <span class="text-xs uppercase tracking-[0.3em] text-brand-sage font-sans font-bold">Wedding Atmosphere Lab</span>
-                            <h1 class="font-serif text-3xl md:text-5xl text-brand-dark tracking-wide font-bold leading-tight">
+                            <h1 class="font-serif text-3xl md:text-4xl text-brand-dark tracking-wide font-bold leading-tight">
                                 找到你們真正適合的<br>婚禮氛圍
                             </h1>
-                            <div class="flex justify-center items-center space-x-3 my-4">
+                            <div class="flex justify-center items-center space-x-3 my-2">
                                 <div class="h-[1px] w-8 bg-brand-sage/20"></div>
                                 <span class="font-serif text-brand-sage text-sm font-bold">BE YOUR SUN</span>
                                 <div class="h-[1px] w-8 bg-brand-sage/20"></div>
                             </div>
                         </div>
                         
-                        <p class="text-brand-dark/80 text-sm md:text-base leading-relaxed max-w-xl mx-auto font-sans font-light tracking-wide px-2">
+                        <p class="text-brand-dark/80 text-sm leading-relaxed max-w-xl mx-auto font-sans font-light tracking-wide px-2">
                             婚禮不只是流程安排，而是新人、賓客與現場感受一起形成的氛圍。<br class="hidden sm:inline">
                             透過這份簡短診斷，整理你們適合的婚禮節奏、互動方式與現場感覺。
                         </p>
 
-                        <!-- Brand guideline panel (Inclusive of hotel ballrooms and small weddings) -->
-                        <div class="bg-brand-apricot/80 rounded-2xl p-6 max-w-xl mx-auto space-y-2 border border-brand-sage/10 text-left paper-shadow">
+                        <!-- Brand guideline panel -->
+                        <div class="bg-brand-apricot/80 rounded-2xl p-5 max-w-xl mx-auto space-y-1.5 border border-brand-sage/10 text-left paper-shadow">
                             <div class="flex items-center space-x-2 text-brand-sage text-xs tracking-widest font-bold uppercase font-sans mb-1">
                                 <span class="w-1.5 h-1.5 bg-brand-yellow rounded-full"></span>
                                 <span>Wedding Design Concept</span>
@@ -562,7 +568,7 @@
                             </p>
                         </div>
 
-                        <div class="pt-6">
+                        <div class="pt-3">
                             <button onclick="startDiagnosticQuiz()" class="w-full sm:w-auto px-10 py-3.5 bg-brand-sage hover:bg-brand-forest text-white text-sm tracking-[0.2em] rounded-xl transition-all duration-300 shadow-sm hover:shadow-md transform hover:scale-[1.01]">
                                 開始診斷 Atmosphere Guide
                             </button>
@@ -628,7 +634,7 @@
                             </h2>
                         </div>
 
-                        <!-- Styled Options Selection Grid with Touch Target optimization -->
+                        <!-- Styled Options Selection Grid -->
                         <div class="space-y-3" id="interactive-options-group">
                             ${activeQuestion.options.map((opt) => {
                                 const isSelected = activeAnswer === opt.key;
@@ -686,7 +692,7 @@
                             </div>
                         </div>
 
-                        <!-- Part 1: 新人特質 (Modern Card layout with green accent) -->
+                        <!-- Part 1: 新人特質 -->
                         <div class="space-y-2 bg-brand-apricot p-6 rounded-2xl border border-brand-sage/10 relative paper-shadow">
                             <div class="absolute top-4 right-4 font-serif italic text-3xl text-brand-sage/15 font-bold select-none">01</div>
                             <h3 class="font-serif text-base text-brand-dark tracking-wider font-bold border-b border-brand-sage/10 pb-2 flex items-center space-x-2">
@@ -698,7 +704,7 @@
                             </p>
                         </div>
 
-                        <!-- Part 2: 流程建議 (Premium vertical timeline implementation) -->
+                        <!-- Part 2: 流程建議 -->
                         <div class="space-y-4 bg-white p-6 rounded-2xl border border-brand-sage/10 relative">
                             <div class="absolute top-4 right-4 font-serif italic text-3xl text-brand-sage/15 font-bold select-none">02</div>
                             <h3 class="font-serif text-base text-brand-dark tracking-wider font-bold border-b border-brand-sage/10 pb-2 flex items-center space-x-2">
@@ -706,11 +712,9 @@
                                 <span>專屬時程與流程建議 · Timeline</span>
                             </h3>
                             
-                            <!-- Elegant Vertical Timeline representing design tokens of BE YOUR SUN -->
                             <div class="relative pl-6 space-y-5 border-l border-dashed border-brand-sage/30 ml-2.5 pt-3">
                                 ${matchedVibe.suggestions.map((suggestion, index) => `
                                     <div class="relative">
-                                        <!-- Vertical timeline marker -->
                                         <span class="absolute -left-[30px] top-1.5 w-3 h-3 rounded-full bg-white border-2 border-brand-sage flex items-center justify-center">
                                             <span class="w-1.5 h-1.5 rounded-full bg-brand-sage"></span>
                                         </span>
@@ -738,10 +742,10 @@
                             Bespoke Wedding Atmosphere · Editorial Taste
                         </div>
 
-                        <!-- Primary call-to-actions (變更為報價單網頁門戶，右下角仍維持 IG 浮動按鈕) -->
+                        <!-- Primary call-to-actions (精準對接 Canva 服務報價單) -->
                         <div class="pt-6 border-t border-brand-sage/10 flex flex-col space-y-3.5">
                             
-                            <!-- 💡 服務內容與報價單直達通道（已完美嵌入您的 Canva 官網連結） -->
+                            <!-- 🔗 官方服務報價單超連結 -->
                             <a href="https://sunnyyeh-wedding.my.canva.site/price" target="_blank" rel="noopener noreferrer" class="w-full text-center p-4 bg-brand-sage hover:bg-brand-forest text-white rounded-xl transition-all duration-300 shadow-sm flex flex-col items-center justify-center hover:shadow-md transform hover:scale-[1.01] group">
                                 <div class="flex items-center space-x-2 text-xs tracking-[0.2em] font-sans font-bold">
                                     <span>看 BE YOUR SUN 服務內容與報價單 ☀️</span>
@@ -749,7 +753,7 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                                     </svg>
                                 </div>
-                                <span class="text-[10px] text-white/70 tracking-wider font-sans font-light mt-1">看 Sunny 如何把這樣的氛圍，完美落實現行你們的婚禮中</span>
+                                <span class="text-[10px] text-white/70 tracking-wider font-sans font-light mt-1">看 Sunny 如何把這樣的氛圍，完美落實在你們的婚禮中</span>
                             </a>
 
                             <!-- Export High Definition image for instagram share -->
@@ -776,8 +780,6 @@
         // Allows jump stepping backwards or forwards to completed questions
         function jumpToProgressStep(index) {
             if (index === appState.step) return;
-            
-            // Validation: backward navigation is unrestricted. Forward jumps must have answers in previous queries
             if (index < appState.step || appState.answers[index] !== null || index === 0 || appState.answers[index - 1] !== null) {
                 appState.step = index;
                 saveState();
@@ -807,7 +809,6 @@
                 showToast("請選擇一個選項以繼續診斷。");
                 return;
             }
-
             if (appState.step < 7) {
                 appState.step += 1;
                 saveState();
@@ -825,7 +826,7 @@
                 saveState();
                 renderApp();
             } else if (appState.step === 0) {
-                appState.step = -1; // Goes back to Welcome portal screen
+                appState.step = -1;
                 saveState();
                 renderApp();
             }
@@ -836,7 +837,6 @@
             const btn = document.getElementById('btn-export-vibe-card');
             const originalContents = btn.innerHTML;
             
-            // Display visual loading spinner state inside action button
             btn.innerHTML = `
                 <svg class="animate-spin h-4 w-4 text-brand-forest" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -849,12 +849,10 @@
             const resultType = appState.resultType || "C";
             const currentResult = resultsData[resultType];
 
-            // 1. Populate details securely in the hidden offscreen card
             document.getElementById('card-type-title').innerText = currentResult.title;
             document.getElementById('card-analysis').innerText = currentResult.analysis;
             document.getElementById('card-sunny-value').innerText = currentResult.sunnyValue;
 
-            // Render customized step list on the offscreen card representation
             const listWrapper = document.getElementById('card-suggestions-container');
             listWrapper.innerHTML = currentResult.suggestions.map((suggestion, idx) => `
                 <div class="relative">
@@ -867,12 +865,11 @@
                 </div>
             `).join('');
 
-            // 2. Allow slight delay for HTML paint buffer, then export via html2canvas
             setTimeout(() => {
                 const targetNode = document.getElementById('capture-card');
                 
                 html2canvas(targetNode, {
-                    scale: 2, // 2x scale output multiplier for high definition retina screens & clean print density
+                    scale: 2,
                     useCORS: true,
                     backgroundColor: "#F4F6F0",
                     logging: false
@@ -903,7 +900,6 @@
             }, 600);
         }
 
-        // Window Load Bootstrap Hook
         window.onload = function() {
             loadState();
             renderApp();
