@@ -1,909 +1,1008 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-Hant">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3 分鐘婚禮氛圍診斷 — BE YOUR SUN</title>
-    
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Google Fonts: Noto Serif TC (優雅宋體), Noto Sans TC (簡約黑體) & Cormorant Garamond -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
-    
-    <!-- html2canvas library for high-resolution sharing card generation -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>憍旨瘞?閮箸 | BE YOUR SUN</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@600;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --sage: #8fa882;
+      --forest: #7b946f;
+      --bg: #f4f6f0;
+      --dark: #2e352b;
+      --muted: #747a70;
+      --line: rgba(143, 168, 130, .22);
+      --apricot: #fefbf3;
+      --sun: #f59e0b;
+      --white: #fff;
+    }
 
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            sage: '#8FA882',      // Sage Green (主色)
-                            forest: '#7b946f',    // Forest Green (主色深)
-                            yellow: '#F59E0B',    // Sun Yellow (輔助暖陽色)
-                            bg: '#F4F6F0',        // Warm Off-White (大背景)
-                            card: '#FFFFFF',      // Pure White (卡片背景)
-                            border: 'rgba(143, 168, 130, 0.1)', // 極輕綠邊 (10% opacity)
-                            apricot: '#FEFBF3',   // 溫馨杏黃 (提示背景)
-                            dark: '#2E352B'       // 森林黑褐 (字體主色)
-                        }
-                    },
-                    fontFamily: {
-                        serif: ['Noto Serif TC', 'Cormorant Garamond', 'Georgia', 'serif'],
-                        sans: ['Noto Sans TC', 'system-ui', 'sans-serif']
-                    }
-                }
-            }
-        }
-    </script>
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Noto Sans TC", system-ui, sans-serif;
+      color: var(--dark);
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+    }
 
-    <style>
-        body {
-            font-family: 'Noto Sans TC', sans-serif;
-            background-color: #F4F6F0;
-            color: #2E352B;
-            -webkit-font-smoothing: antialiased;
-        }
-        
-        /* Premium custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #F4F6F0;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #D2DBCF;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #8FA882;
-        }
-        
-        /* Elegant smooth transition animations */
-        .fade-in {
-            animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(12px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    button { font: inherit; }
 
-        /* Micro subtle hand-drawn paper look for cards */
-        .paper-shadow {
-            box-shadow: 0 4px 20px -2px rgba(46, 53, 43, 0.05);
-        }
+    .page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
 
-        /* 療癒系暖陽漸層 */
-        .ig-sun-gradient {
-            background: linear-gradient(135deg, #F59E0B 0%, #E95950 35%, #BC1888 75%, #8A3AB9 100%);
-        }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(255,255,255,.92);
+      border-bottom: 1px solid rgba(143,168,130,.12);
+      backdrop-filter: blur(14px);
+    }
 
-        /* 暖陽呼吸微光特效 */
-        @keyframes sunGlow {
-            0%, 100% {
-                box-shadow: 0 0 12px rgba(245, 158, 11, 0.35), 0 4px 14px rgba(188, 24, 136, 0.2);
-                transform: translateY(0) scale(1);
-            }
-            50% {
-                box-shadow: 0 0 22px rgba(245, 158, 11, 0.65), 0 8px 24px rgba(188, 24, 136, 0.4);
-                transform: translateY(-4px) scale(1.03);
-            }
-        }
-        .sun-glow-animation {
-            animation: sunGlow 3.5s infinite ease-in-out;
-        }
-    </style>
+    .topbar-inner {
+      max-width: 1060px;
+      margin: 0 auto;
+      padding: 18px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .sun-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      background: rgba(143,168,130,.12);
+      color: var(--sage);
+      flex: 0 0 auto;
+    }
+
+    .brand-title {
+      font-family: "Noto Serif TC", serif;
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: .18em;
+      white-space: nowrap;
+    }
+
+    .brand-subtitle {
+      margin-top: 2px;
+      font-size: 10px;
+      color: var(--forest);
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .slogan {
+      display: none;
+      font-size: 12px;
+      color: var(--forest);
+      letter-spacing: .12em;
+      font-style: italic;
+    }
+
+    main {
+      width: 100%;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 42px 18px 56px;
+      flex: 1;
+      display: grid;
+      place-items: center;
+    }
+
+    .shell {
+      width: min(100%, 860px);
+      background: var(--white);
+      border: 1px solid rgba(143,168,130,.16);
+      border-radius: 16px;
+      box-shadow: 0 12px 36px rgba(46,53,43,.06);
+      padding: clamp(30px, 6vw, 70px);
+    }
+
+    .intro {
+      text-align: center;
+      animation: fadeIn .45s ease both;
+    }
+
+    .eyebrow {
+      display: block;
+      color: var(--sage);
+      font-weight: 700;
+      letter-spacing: .42em;
+      text-transform: uppercase;
+      font-size: clamp(13px, 2.2vw, 18px);
+      margin-bottom: 26px;
+    }
+
+    .hero-title {
+      margin: 0;
+      font-family: "Noto Serif TC", serif;
+      font-weight: 900;
+      line-height: .98;
+      letter-spacing: .02em;
+      color: var(--dark);
+      font-size: clamp(46px, 8vw, 92px);
+    }
+
+    .brand-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 22px;
+      margin: 34px auto 54px;
+      color: var(--sage);
+      font-family: "Noto Serif TC", serif;
+      font-size: clamp(18px, 3vw, 28px);
+      font-weight: 900;
+    }
+
+    .brand-divider::before,
+    .brand-divider::after {
+      content: "";
+      width: 58px;
+      height: 1px;
+      background: rgba(143,168,130,.28);
+    }
+
+    .intro-copy {
+      margin: 0 auto;
+      max-width: 780px;
+      color: var(--muted);
+      font-size: clamp(18px, 2.6vw, 28px);
+      line-height: 1.75;
+      font-weight: 300;
+      letter-spacing: .02em;
+    }
+
+    .primary-action {
+      margin-top: 40px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 0 30px;
+      border: 0;
+      border-radius: 8px;
+      background: var(--sage);
+      color: white;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: .14em;
+      cursor: pointer;
+      transition: background .2s ease, transform .2s ease;
+    }
+
+    .primary-action:hover { background: var(--forest); transform: translateY(-1px); }
+
+    .quiz, .result { animation: fadeIn .35s ease both; }
+
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      color: rgba(46,53,43,.58);
+      font-size: 11px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+
+    .steps {
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      margin: 0 0 34px;
+    }
+
+    .steps::before {
+      content: "";
+      position: absolute;
+      left: 16px;
+      right: 16px;
+      top: 16px;
+      height: 1px;
+      background: var(--line);
+    }
+
+    .step {
+      position: relative;
+      z-index: 1;
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: white;
+      color: rgba(46,53,43,.55);
+      display: grid;
+      place-items: center;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .step.done, .step.active {
+      border-color: var(--sage);
+      background: var(--sage);
+      color: white;
+      font-weight: 700;
+    }
+
+    .question {
+      margin: 0 0 22px;
+      font-family: "Noto Serif TC", serif;
+      font-size: clamp(22px, 3vw, 30px);
+      line-height: 1.45;
+    }
+
+    .options {
+      display: grid;
+      gap: 12px;
+    }
+
+    .option {
+      width: 100%;
+      border: 1px solid rgba(143,168,130,.20);
+      background: white;
+      color: var(--dark);
+      border-radius: 10px;
+      padding: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-align: left;
+      transition: border-color .2s ease, background .2s ease, transform .2s ease;
+    }
+
+    .option:hover, .option.selected {
+      border-color: var(--sage);
+      background: var(--apricot);
+    }
+
+    .option.selected { transform: translateX(2px); }
+
+    .option-key {
+      width: 30px;
+      height: 30px;
+      border-radius: 999px;
+      border: 1px solid rgba(143,168,130,.35);
+      display: grid;
+      place-items: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--forest);
+      flex: 0 0 auto;
+    }
+
+    .option.selected .option-key {
+      background: var(--sage);
+      color: white;
+      border-color: var(--sage);
+    }
+
+    .nav-row {
+      margin-top: 28px;
+      padding-top: 22px;
+      border-top: 1px solid rgba(143,168,130,.12);
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .ghost-action, .secondary-action {
+      min-height: 44px;
+      border-radius: 8px;
+      padding: 0 18px;
+      cursor: pointer;
+      transition: background .2s ease, color .2s ease, border-color .2s ease;
+    }
+
+    .ghost-action {
+      border: 0;
+      background: transparent;
+      color: rgba(46,53,43,.62);
+    }
+
+    .ghost-action:hover { color: var(--dark); }
+
+    .secondary-action {
+      border: 1px solid rgba(143,168,130,.28);
+      background: white;
+      color: var(--dark);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .08em;
+    }
+
+    .secondary-action:hover { border-color: var(--sage); background: var(--bg); }
+    .secondary-action:disabled { opacity: .35; cursor: not-allowed; }
+
+    .result-header {
+      text-align: center;
+      padding-bottom: 26px;
+      border-bottom: 1px solid rgba(143,168,130,.12);
+      margin-bottom: 26px;
+    }
+
+    .result-title {
+      margin: 10px 0 0;
+      font-family: "Noto Serif TC", serif;
+      font-size: clamp(32px, 5vw, 52px);
+      line-height: 1.15;
+    }
+
+    .section {
+      border: 1px solid rgba(143,168,130,.13);
+      border-radius: 12px;
+      padding: 22px;
+      margin-bottom: 16px;
+      background: white;
+    }
+
+    .section.alt { background: var(--apricot); }
+    .section h3 {
+      margin: 0 0 12px;
+      font-family: "Noto Serif TC", serif;
+      font-size: 18px;
+    }
+
+    .section p, .section li {
+      color: rgba(46,53,43,.78);
+      line-height: 1.8;
+      font-weight: 300;
+    }
+
+    .timeline {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    .result-actions {
+      display: grid;
+      gap: 12px;
+      margin-top: 26px;
+    }
+
+    .price-link {
+      min-height: 52px;
+      border-radius: 8px;
+      background: var(--sage);
+      color: white;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 12px 18px;
+      font-weight: 700;
+      letter-spacing: .08em;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 22px;
+      transform: translate(-50%, 12px);
+      z-index: 50;
+      max-width: min(92vw, 520px);
+      background: rgba(46,53,43,.96);
+      color: white;
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 13px;
+      line-height: 1.5;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    .ig-link {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 30;
+      width: 52px;
+      height: 52px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      color: white;
+      background: linear-gradient(135deg, #f59e0b 0%, #e95950 35%, #bc1888 75%, #8a3ab9 100%);
+      box-shadow: 0 10px 24px rgba(188, 24, 136, .24);
+    }
+
+    footer {
+      background: white;
+      border-top: 1px solid rgba(143,168,130,.12);
+      text-align: center;
+      color: rgba(46,53,43,.55);
+      padding: 26px 18px;
+      font-size: 12px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (min-width: 760px) {
+      .slogan { display: block; }
+    }
+
+    @media (max-width: 560px) {
+      .topbar-inner { padding: 14px 16px; }
+      .brand-title { font-size: 15px; letter-spacing: .12em; }
+      main { padding: 18px 12px 36px; align-items: start; }
+      .shell { border-radius: 12px; padding: 30px 18px; }
+      .eyebrow { letter-spacing: .28em; margin-bottom: 20px; }
+      .brand-divider { margin: 26px auto 36px; }
+      .intro-copy { font-size: 18px; }
+      .option { padding: 14px 12px; align-items: flex-start; }
+      .nav-row { flex-direction: column-reverse; }
+      .ghost-action, .secondary-action, .primary-action { width: 100%; }
+      .ig-link { width: 48px; height: 48px; }
+    }
+  </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between overflow-x-hidden selection:bg-[#8FA882]/20">
-
-    <!-- Brand Premium Header -->
-    <header class="border-b border-[#8FA882]/10 py-5 px-6 bg-white/90 sticky top-0 z-40 backdrop-blur-md shadow-sm">
-        <div class="max-w-4xl mx-auto flex justify-between items-center">
-            <!-- Brand Identity -->
-            <div class="flex items-center space-x-3">
-                <div class="w-8 h-8 rounded-full bg-brand-sage/10 flex items-center justify-center">
-                    <!-- Elegant Minimal Sun SVG -->
-                    <svg class="w-5 h-5 text-brand-sage" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <circle cx="12" cy="12" r="5" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
-                    </svg>
-                </div>
-                <div class="flex flex-col">
-                    <span class="font-serif tracking-[0.2em] text-lg font-bold text-brand-dark">BE YOUR SUN</span>
-                    <span class="text-[9px] tracking-[0.15em] text-brand-sage uppercase font-sans mt-0.5">Wedding Atmosphere Lab / 行光合作用</span>
-                </div>
-            </div>
-            <!-- Elegant Quote Slogan -->
-            <div class="text-xs text-brand-forest font-sans tracking-widest hidden md:block italic">
-                「 讓婚禮不只是完成流程，而是被感受到的一場派對 」
-            </div>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div class="brand" aria-label="BE YOUR SUN">
+          <div class="sun-mark" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="4.5"></circle>
+              <path d="M12 2v3M12 19v3M4.93 4.93l2.12 2.12M16.95 16.95l2.12 2.12M2 12h3M19 12h3M4.93 19.07l2.12-2.12M16.95 7.05l2.12-2.12"></path>
+            </svg>
+          </div>
+          <div>
+            <div class="brand-title">BE YOUR SUN</div>
+            <div class="brand-subtitle">Wedding Atmosphere Lab / 銵?????/div>
+          </div>
         </div>
+        <div class="slogan">霈?蝳桐??芣摰?瘚?嚗鋡急?????湔晷撠?/div>
+      </div>
     </header>
 
-    <!-- Main content area -->
-    <main class="flex-grow flex items-center justify-center py-10 px-4 md:px-8">
-        <!-- Interactive Diagnosis Card Outer Frame -->
-        <div class="w-full max-w-2xl bg-white border border-brand-border shadow-sm rounded-2xl p-6 md:p-10 relative min-h-[520px] flex flex-col justify-between transition-all duration-300 hover:shadow-md">
-            
-            <!-- Dynamic Application Container -->
-            <div id="app-container" class="fade-in w-full relative z-10">
-                <!-- Reacts to state changes and gets rendered dynamically via JS -->
-            </div>
-
-        </div>
+    <main>
+      <section class="shell" id="app" aria-live="polite"></section>
     </main>
 
-    <!-- Custom Elegant Non-Blocking Toast Notification -->
-    <div id="custom-toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-[#2E352B]/95 text-brand-bg px-6 py-3 rounded-xl text-xs tracking-wider opacity-0 pointer-events-none transition-all duration-300 shadow-xl flex items-center space-x-2 z-50 border border-brand-sage/20">
-        <svg class="w-4 h-4 text-brand-yellow fill-current" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
-        </svg>
-        <span id="toast-message" class="font-sans font-light tracking-wide"></span>
-    </div>
-
-    <!-- Premium Editorial Footer -->
-    <footer class="border-t border-[#8FA882]/10 py-8 px-6 text-center text-xs text-brand-dark/60 bg-white">
-        <div class="max-w-4xl mx-auto space-y-3">
-            <p class="font-serif italic text-sm text-brand-dark">「 讓婚禮不只是完成流程，而是被感受到的一場派對 」</p>
-            <div class="h-[1px] w-6 bg-brand-sage/20 mx-auto my-2"></div>
-            <p class="text-[10px] text-brand-dark/40 uppercase tracking-[0.15em]">&copy; 2026 BE YOUR SUN Wedding Lab. All rights reserved.</p>
-        </div>
+    <footer>
+      <p>??霈?蝳桐??芣摰?瘚?嚗鋡急?????湔晷撠???/p>
+      <p>穢 2026 BE YOUR SUN Wedding Lab. All rights reserved.</p>
     </footer>
+  </div>
 
-    <!-- Offscreen Shareable Card Container (Strictly styled like a 9:16 Instagram Story high-res template) -->
-    <div id="capture-container-wrapper" class="absolute left-[-9999px] top-0 overflow-hidden">
-        <div id="capture-card" class="w-[640px] h-[1138px] bg-[#F4F6F0] p-12 flex flex-col justify-between border-[14px] border-white shadow-2xl relative" style="font-family: 'Noto Sans TC', sans-serif;">
-            
-            <!-- Stylized decorative thin border for hand-crafted feel -->
-            <div class="absolute inset-4 border border-[#8FA882]/25 pointer-events-none rounded-xl"></div>
-            <div class="absolute inset-[20px] border border-[#8FA882]/10 pointer-events-none rounded-lg"></div>
-            
-            <div class="relative z-10 flex flex-col justify-between h-full">
-                <!-- Top Brand Logo -->
-                <div class="text-center pt-4">
-                    <div class="flex items-center justify-center space-x-2 mb-2">
-                        <div class="w-7 h-7 rounded-full bg-[#8FA882]/15 flex items-center justify-center">
-                            <svg class="w-4.5 h-4.5 text-[#8FA882]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <circle cx="12" cy="12" r="5" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
-                            </svg>
-                        </div>
-                        <span class="font-serif tracking-[0.2em] text-lg font-bold text-[#2E352B]">BE YOUR SUN</span>
-                    </div>
-                    <p class="text-[9px] tracking-[0.2em] text-[#8FA882] uppercase">Wedding Atmosphere Proposal / 行光合作用</p>
-                    <div class="h-[1px] w-12 bg-[#8FA882]/25 mx-auto mt-4"></div>
-                </div>
+  <a class="ig-link" href="https://www.instagram.com/sunny_yeh_wedding/" target="_blank" rel="noopener noreferrer" aria-label="?? Sunny Instagram 蝎?">
+    <svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <rect x="2" y="2" width="20" height="20" rx="5"></rect>
+      <circle cx="12" cy="12" r="4"></circle>
+      <path d="M17.5 6.5h.01"></path>
+    </svg>
+  </a>
 
-                <!-- Main Diagnosis Identity Card Header -->
-                <div class="text-center my-4 px-4 bg-white/70 py-6 rounded-2xl border border-[#8FA882]/10 shadow-sm">
-                    <p class="text-[10px] tracking-[0.25em] text-[#8FA882] font-sans font-bold uppercase mb-1">專屬你們的婚禮提案</p>
-                    <h2 id="card-type-title" class="font-serif text-3xl font-bold text-[#2E352B] tracking-wide mt-2">美式派對型婚禮</h2>
-                    <span class="inline-block px-3 py-0.5 bg-[#8FA882]/10 text-[#7b946f] text-[9px] rounded-full tracking-widest font-sans uppercase mt-2 font-medium">
-                        Atmosphere Vibe Card
-                    </span>
-                </div>
+  <div class="toast" id="toast"></div>
 
-                <!-- Comprehensive Core Results Boxes -->
-                <div class="space-y-6 text-left px-4">
-                    <!-- Section 1: 新人特質 -->
-                    <div class="bg-white/50 p-4.5 rounded-xl border border-[#8FA882]/5">
-                        <div class="flex items-center space-x-2 mb-2">
-                            <span class="w-1.5 h-1.5 bg-[#8FA882] rounded-full"></span>
-                            <span class="font-serif text-sm font-bold text-[#2E352B] tracking-wider">新人美學特質 · Analysis</span>
-                        </div>
-                        <p id="card-analysis" class="text-xs text-[#2E352B]/80 pl-3.5 leading-relaxed font-light">
-                            你們希望婚禮不只是吃飯，而是朋友們可以放鬆、舉杯、聊天、拍照、互動。
-                        </p>
-                    </div>
+  <script>
+    const questions = [
+      {
+        title: "雿???蝳桃策鈭箇?蝚砌??死?荔?",
+        options: [
+          ["A", "?芰?擛?憭批振?臭誑?芸?予"],
+          ["B", "皞恍成??????敺楛??蝺???],
+          ["C", "?梢洹??瘣曉??????敺?敹?],
+          ["D", "蝪∠???鞈芣?嚗??閬云憭???蝔?],
+          ["E", "甇?????撘?嚗頛拐??賣????"]
+        ]
+      },
+      {
+        title: "雿?銝???蝳株??銝蝔格見摮?",
+        options: [
+          ["A", "瘚?憭芣遛嚗?摰Ｖ??渲◤?"],
+          ["B", "瘞??憭芯嗾嚗之摰嗅?臬???憌?],
+          ["D", "憭芸撘???銝?游?蝳桅銝璅?],
+          ["C", "憭芸健撠穿?鋡怎′ cue ?銝???"],
+          ["E", "憭芣毽鈭?瘝?鈭箸??∠?憟?]
+        ]
+      },
+      {
+        title: "雿?鞈恥蝯?瘥??亥??芯?蝔殷?",
+        options: [
+          ["C", "??瘥?擃?憭批振敶潭迨??敺?鈭?"],
+          ["E", "摰嗡犖?瑁憬瘥?擃??閬“?迤撘?"],
+          ["D", "?????毽???閬?嗡?銝?憭芸"],
+          ["A", "撠?閬芸?憍旨嚗之摰園?靽敺?餈?],
+          ["B", "?鞈恥銝云???閬?鈭箏??拙葆?交除瘞?]
+        ]
+      },
+      {
+        title: "雿?憍旨瘚??瘜?頛餈銝蝔殷?",
+        options: [
+          ["A", "銝摰?憭芣遛嚗靽?蝛箇??"],
+          ["B", "撣??嗾??閮暺?璈挾"],
+          ["C", "撣??曉?臭誑?梢洹銝暺?????"],
+          ["D", "?迭蝪∪????銝?憭芾???],
+          ["E", "?瑁憬瘚??閬“?堆?雿???閬云?喟絞"]
+        ]
+      },
+      {
+        title: "雿?撣?銝餅?鈭箇?閫瘥???",
+        options: [
+          ["A", "皞急?撘?嚗?瘞???芰銝脰絲靘?],
+          ["E", "蝛拙??批嚗?瘚?銝毽鈭?],
+          ["C", "撣嗅?瘞??嚗?鞈恥?湔???],
+          ["D", "????璅??塚?銝?憭芣迤撘?],
+          ["B", "?冽?鈭箏??梢洹銋?撟怠???"]
+        ]
+      },
+      {
+        title: "雿??冽?鞈恥?典?蝳桐葉?銝蝔格???",
+        options: [
+          ["A", "閬箏????芸"],
+          ["B", "閬箏?敺???],
+          ["C", "閬箏?敺末??],
+          ["D", "閬箏?敺??唬犖?芸楛???],
+          ["E", "閬箏?瘚???????]
+        ]
+      },
+      {
+        title: "隞乩??芯??交????閬?憍旨嚗?,
+        options: [
+          ["A", "撣?憭批振銝?芯??ㄞ嚗?????銝?],
+          ["B", "撣?憍旨皞急?雿?瘝?"],
+          ["C", "撣????臭誑?芰?予???胯??箔?"],
+          ["D", "撣??恍銋暹楊憟賜?嚗?蝔?閬云憭?],
+          ["E", "撣?閰脫迤撘??迤撘?閰脫擛??擛?]
+        ]
+      },
+      {
+        title: "雿???閬◤??嚗?,
+        options: [
+          ["D", "銝??蝔獐????],
+          ["C", "銝?獐霈?湔?瘞??"],
+          ["A", "銝????蝳株?銝?摰?瘣餃?"],
+          ["E", "銝?蜓?犖?臭誑撟怠?芯??唳"],
+          ["B", "撌脩??瘜?雿?閬?鈭箏鼠敹??摰隡?"]
+        ]
+      }
+    ];
 
-                    <!-- Section 2: 流程建議 -->
-                    <div class="bg-white/50 p-4.5 rounded-xl border border-[#8FA882]/5">
-                        <div class="flex items-center space-x-2 mb-3">
-                            <span class="w-1.5 h-1.5 bg-[#8FA882] rounded-full"></span>
-                            <span class="font-serif text-sm font-bold text-[#2E352B] tracking-wider">專屬時程與流程建議 · Timeline</span>
-                        </div>
-                        
-                        <!-- Visualized Dashed timeline wrapper for capturing -->
-                        <div class="relative pl-4 space-y-2.5 border-l border-dashed border-[#8FA882]/40 ml-1.5" id="card-suggestions-container">
-                            <!-- Populated dynamically -->
-                        </div>
-                    </div>
+    const resultsData = {
+      A: {
+        title: "?芰擛???蝳?,
+        analysis: "雿???渲????澆??憍旨??暺??臬?皛踵?蝔??霈?摰Ｚ?園?餈?憭押???霈?湔?銝蝔桀??末?澈摨艾?,
+        suggestions: [
+          "瘚??嚗?閬?瘥挾???賣?皛選?霈?摰Ｘ??芰鈭??征??,
+          "摰?頛?鈭?嚗?憒鈭箏?游???隞餃???蝳????憭拙?撠?,
+          "銝餅?隤除?拙?皞急??????砌葡?湛??踹??漲?嗅?????cue 鈭箝?
+        ],
+        sunnyValue: "Sunny ?臭誑撟思???擛?????蝘拙???渡?憟?霈?蝳株?嗡?銝????
+      },
+      B: {
+        title: "皞恍成????蝳?,
+        analysis: "雿??蝺?閮暺??拙???蝳桀??澈??銝???蝭憟?鈭箇?璈挾?閬◤摰?嚗?銝霈?渲?敺云皛踵?憭芰??,
+        suggestions: [
+          "靽?銝?啣???敹?畾蛛?靘?隤??振鈭箇?蝳??唬犖????,
+          "?冽?鈭箸挾?賢?摰?頛?頧嚗??曉???芰??????,
+          "?單?????銝餅?隤?????嚗?閬??摮?????
+        ],
+        sunnyValue: "Sunny ?臭誑?雿????渡???嗥?瘚?嚗?霈???憯???
+      },
+      C: {
+        title: "蝢?瘣曉???蝳?,
+        analysis: "雿???湔?蝚??鈭斗???摰ａ????亦?憍旨??港??閬′?拚??莎??閬?鈭?閮剛?敺?嗚?蝭憟之摰園???韏瑕???,
+        suggestions: [
+          "敺?鞈? Welcome Drinks ???芣除瘞?霈?摰Ｖ??脣撠望?頛擛?,
+          "摰?銝健撠祉?鈭?璈挾嚗?憒??胯末??蝳???隞餃???,
+          "?璅蜓??憟????銝脰絲靘?霈晷撠??芰?潛???
+        ],
+        sunnyValue: "Sunny ?臭誑撟思????梢洹霈??????曉嚗??臬嚗憭批振???拙??脣??
+      },
+      D: {
+        title: "蝪∠?鞈芣???蝳?,
+        analysis: "雿?嗾瘛具??賬??犖憸冽??蝳柴?蝔??閬?嚗?瘥?畾菟閬?摮???恍??瘞??蝭憟閬????氬?,
+        suggestions: [
+          "?芣?銝?閬??嗅?璈挾嚗???迤撠????儔?摰嫘?,
+          "銝餅?閰?蝪⊥?蝎暹?嚗??摨衣擛扳?憭芸??芷??,
+          "??蝔璅?閬死蝯曹?嚗?憍旨?絲靘嗾瘛其????喋?
+        ],
+        sunnyValue: "Sunny ?臭誑撟思???蝪∠???摰嚗????箸?蝔?撠梢＊敺征??
+      },
+      E: {
+        title: "蝛拙??撘?憍旨",
+        analysis: "雿?閬??渡帘摰??Ｕ頛拙?敹??唬犖銝◤?喟絞蝬???蝳柴??菜?甇???擛???????,
+        suggestions: [
+          "??閬?撘??冽?璆?雿蔭嚗??瑁憬???啗◤撠???,
+          "甇??畾菔敺??亥?擛??湛??踹??游??牲??,
+          "銝餅?鈭粹?閬帘摰?湛?霈鈭箔??其??湔?敹?蝔?
+        ],
+        sunnyValue: "Sunny ?臭誑撟思???蝳格憿批末嚗????惇?潔?????瘞???
+      }
+    };
 
-                    <!-- Section 3: Sunny 協助價值 -->
-                    <div class="bg-[#FEFBF3] p-4.5 rounded-xl border border-amber-200/30">
-                        <div class="flex items-center space-x-2 mb-1.5">
-                            <span class="w-1.5 h-1.5 bg-[#F59E0B] rounded-full"></span>
-                            <span class="font-serif text-xs font-bold text-[#2E352B] tracking-wider">光合作用價值 · BE YOUR SUN Value</span>
-                        </div>
-                        <p id="card-sunny-value" class="text-xs text-[#2E352B] pl-3.5 font-medium leading-relaxed">
-                            幫你們把流程留白設計好，讓現場不是放空，而是自然發生互動。
-                        </p>
-                    </div>
-                </div>
+    const priorityOrder = ["C", "A", "D", "B", "E"];
+    const stateKey = "be_your_sun_vibe_quiz_fixed_v1";
+    const app = document.getElementById("app");
+    let state = loadState();
 
-                <!-- Footer of the Card -->
-                <div class="border-t border-[#8FA882]/10 pt-6 pb-2 text-center">
-                    <p class="font-serif italic text-xs text-[#2E352B]">「 讓婚禮不只是完成流程，而是被感受到的一場派對 」</p>
-                    <div class="flex justify-between items-center max-w-xs mx-auto mt-5 text-[9px] tracking-widest text-[#2E352B]/50 font-sans uppercase">
-                        <span>IG: @sunny_yeh_wedding</span>
-                        <span>Atmosphere Report</span>
-                    </div>
-                </div>
-            </div>
+    function loadState() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(stateKey));
+        if (saved && typeof saved.step === "number" && Array.isArray(saved.answers)) return saved;
+      } catch (error) {}
+      return { step: -1, answers: Array(8).fill(null), resultType: null, isCompleted: false };
+    }
+
+    function saveState() {
+      localStorage.setItem(stateKey, JSON.stringify(state));
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => toast.classList.remove("show"), 2800);
+    }
+
+    function render() {
+      if (state.step === -1) return renderIntro();
+      if (state.step >= 0 && state.step < questions.length) return renderQuestion();
+      return renderResult();
+    }
+
+    function renderIntro() {
+      app.innerHTML = `
+        <div class="intro">
+          <span class="eyebrow">Wedding Atmosphere Lab</span>
+          <h1 class="hero-title">?曉雿?甇???<br>憍旨瘞?</h1>
+          <div class="brand-divider">BE YOUR SUN</div>
+          <p class="intro-copy">
+            憍旨銝?舀?蝔?????唬犖??摰Ｚ??曉??銝韏瑕耦??瘞???br>
+            ???遢蝪∠閮箸嚗?????憍旨蝭憟??撘??曉?死??          </p>
+          <button class="primary-action" type="button" onclick="startQuiz()">??閮箸</button>
         </div>
-    </div>
+      `;
+    }
 
-    <!-- 療癒系右下角浮動按鈕 (IG Direct Access Button) -->
-    <div class="fixed bottom-6 right-6 md:bottom-8 md:right-8 z-50 flex items-center group">
-        <!-- 漂浮優雅提示 Tooltip (Hover時自動浮現) -->
-        <span class="absolute right-16 bg-brand-dark/95 text-white text-[11px] tracking-wider px-3 py-1.5 rounded-lg opacity-0 translate-x-4 pointer-events-none transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 whitespace-nowrap shadow-md border border-white/10 font-sans font-light">
-            與 Sunny 聊聊 ☀️
-        </span>
-        
-        <!-- 主按鈕本體 -->
-        <a href="https://ig.me/m/sunny_yeh_wedding" target="_blank" rel="noopener noreferrer" class="w-12 h-12 md:w-14 md:h-14 rounded-full ig-sun-gradient sun-glow-animation flex items-center justify-center text-white relative transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-brand-yellow/50" aria-label="私訊 Sunny Instagram">
-            <!-- 太陽芒星微小點綴 (右上角) -->
-            <span class="absolute top-1 right-1 w-3.5 h-3.5 text-brand-yellow drop-shadow-[0_1px_4px_rgba(245,158,11,0.8)] animate-pulse">
-                <svg fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 0l2.5 8.5L23 11l-8.5 2.5L12 22l-2.5-8.5L1 11l8.5-2.5z"/>
-                </svg>
-            </span>
-            <!-- Instagram 簡約圖示 -->
-            <svg class="w-6 h-6 md:w-7 md:h-7 stroke-current fill-none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-            </svg>
-        </a>
-    </div>
+    function renderQuestion() {
+      const q = questions[state.step];
+      const currentAnswer = state.answers[state.step];
+      const steps = questions.map((_, index) => {
+        const className = index === state.step ? "step active" : state.answers[index] ? "step done" : "step";
+        return `<button class="${className}" type="button" onclick="jumpTo(${index})" aria-label="??蝚?${index + 1} 憿?>${index + 1}</button>`;
+      }).join("");
 
-    <script>
-        // Formulated Questions (8 items with 5 answers mapped to Type keys)
-        const questions = [
-            {
-                id: 1,
-                title: "你們希望婚禮給人的第一感覺是？",
-                options: [
-                    { key: "A", text: "自然、放鬆，大家可以自在聊天" },
-                    { key: "B", text: "溫馨、感動，留下很深的情緒記憶" },
-                    { key: "C", text: "熱鬧、有派對感，朋友們玩得開心" },
-                    { key: "D", text: "簡約、有質感，不需要太多複雜流程" },
-                    { key: "E", text: "正式、有儀式感，長輩也能感受到重視" }
-                ]
-            },
-            {
-                id: 2,
-                title: "你們最不希望婚禮變成哪一種樣子？",
-                options: [
-                    { key: "A", text: "流程太滿，賓客一直被打斷" },
-                    { key: "B", text: "氣氛太乾，大家只是坐著吃飯" },
-                    { key: "D", text: "太制式，像每一場婚禮都一樣" },
-                    { key: "C", text: "太尷尬，被硬 cue 或玩不適合的遊戲" },
-                    { key: "E", text: "太混亂，沒有人掌握節奏" }
-                ]
-            },
-            {
-                id: 3,
-                title: "你們的賓客組成比較接近哪一種？",
-                options: [
-                    { key: "C", text: "朋友比例高，大家彼此熟或很會互動" },
-                    { key: "E", text: "家人長輩比例高，需要顧及正式感" },
-                    { key: "D", text: "同事與朋友混合，需要自然但不要太吵" },
-                    { key: "A", text: "小型親友婚禮，大家關係都很靠近" },
-                    { key: "B", text: "雙方賓客不太熟，需要有人協助帶入氣氛" }
-                ]
-            },
-            {
-                id: 4,
-                title: "你們對婚禮流程的想法比較接近哪一種？",
-                options: [
-                    { key: "A", text: "不想安排太滿，想保留空白時間" },
-                    { key: "B", text: "希望有幾個有記憶點的橋段" },
-                    { key: "C", text: "希望現場可以熱鬧一點，有互動感" },
-                    { key: "D", text: "喜歡簡單順順的，不要太複雜" },
-                    { key: "E", text: "長輩流程還是要顧到，但希望不要太傳統" }
-                ]
-            },
-            {
-                id: 5,
-                title: "你們會希望主持人的角色比較像？",
-                options: [
-                    { key: "A", text: "溫柔引導，把氣氛自然串起來" },
-                    { key: "E", text: "穩定控場，讓流程不混亂" },
-                    { key: "C", text: "帶動氣氛，讓賓客更投入" },
-                    { key: "D", text: "像朋友一樣自然，不要太正式" },
-                    { key: "B", text: "在感人和熱鬧之間幫忙切換" }
-                ]
-            },
-            {
-                id: 6,
-                title: "你們最在意賓客在婚禮中的哪一種感受？",
-                options: [
-                    { key: "A", text: "覺得舒服自在" },
-                    { key: "B", text: "覺得很感動" },
-                    { key: "C", text: "覺得很好玩" },
-                    { key: "D", text: "覺得很有新人自己的味道" },
-                    { key: "E", text: "覺得流程順、沒有壓力" }
-                ]
-            },
-            {
-                id: 7,
-                title: "以下哪一句最像你們想要的婚禮？",
-                options: [
-                    { key: "A", text: "希望大家不是只來吃飯，而是真的有參與其中" },
-                    { key: "B", text: "希望婚禮溫柔但不沉重" },
-                    { key: "C", text: "希望朋友可以自然聊天、舉杯、笑出來" },
-                    { key: "D", text: "希望畫面乾淨好看，流程不要太多" },
-                    { key: "E", text: "希望該正式的時候正式，該放鬆的時候放鬆" }
-                ]
-            },
-            {
-                id: 8,
-                title: "你們目前最需要被協助的是？",
-                options: [
-                    { key: "D", text: "不知道流程怎麼排才順" },
-                    { key: "C", text: "不知道怎麼讓現場有氣氛" },
-                    { key: "A", text: "不知道小型婚禮要不要安排活動" },
-                    { key: "E", text: "不知道主持人可以幫到哪些地方" },
-                    { key: "B", text: "已經有想法，但需要有人幫忙整理成完整企劃" }
-                ]
-            }
-        ];
+      const options = q.options.map(([key, text]) => `
+        <button class="option ${currentAnswer === key ? "selected" : ""}" type="button" onclick="selectOption('${key}')">
+          <span class="option-key">${key}</span>
+          <span>${text}</span>
+        </button>
+      `).join("");
 
-        const resultsData = {
-            "A": {
-                title: "自然鬆弛型婚禮",
-                analysis: "你們不喜歡太制式、太滿、太刻意的婚禮。比起安排很多活動，你們更在意大家能不能自在聊天、自然互動、舒服地待在現場。",
-                suggestions: [
-                    "迎賓時間不要壓太短，讓入座過程成為自在的寒暄暖場",
-                    "用餐中間保留適度自由交流，賓客才能好好放鬆聊天",
-                    "避免太多遊戲或尷尬硬 cue，強推節目反而會破壞美學步調",
-                    "主持語氣要自然親切，捨棄典禮播音式腔調，像好友般分享",
-                    "可安排輕量互動，例如隨機舉杯、溫暖的朋友祝福與桌邊問候"
-                ],
-                sunnyValue: "幫你們把流程留白設計好，讓現場不是放空，而是自然發生互動."
-            },
-            "B": {
-                title: "溫馨情感型婚禮",
-                analysis: "你們希望婚禮有情緒、有記憶點，不只是熱鬧吃飯。你們可能很重視家人、誓詞、感謝，或某些人生階段的轉換與沉澱。",
-                suggestions: [
-                    "規劃溫暖且深藏巧思的誓詞或真心感謝父母橋段",
-                    "家人、長輩的參與互動需要提前確認舒適度，不逼迫演出",
-                    "現場音樂、燈光與主持情緒的氣氛鋪陳是完美流淌的靈魂",
-                    "感動橋段適量並精緻，避免過度堆疊，防止氣氛流於過分沉重",
-                    "在情感高潮釋放後，妥善設計轉場，使氣氛優雅自然回到輕鬆"
-                ],
-                sunnyValue: "幫你們把感動放在剛剛好的位置，不煽情，但讓人真的感受到。"
-            },
-            "C": {
-                title: "美式派對型婚禮",
-                analysis: "你們希望婚禮不只是吃飯，而是朋友們可以放鬆、舉杯、聊天、拍照、互動。你們不一定需要很多遊戲，但希望現場有自由流動的氣氛。",
-                suggestions: [
-                    "非常推薦安排精巧迎賓酒（Welcome Drinks）與黃金社交時間",
-                    "提前與主持人或樂手確認整場婚禮起伏有序的音樂節奏",
-                    "二次進場設計成極具派對感、能調動全場賓客眼球的歡樂開場",
-                    "敬酒打破制式逐桌，轉化為全場高舉酒杯的自然互動節點",
-                    "極度適合在正規儀式後，規劃接續熱鬧的 After Party 交流"
-                ],
-                sunnyValue: "幫你們把婚禮從流程表，變成一場大家真的投入其中的聚會。"
-            },
-            "D": {
-                title: "簡約質感型婚禮",
-                analysis: "你們不追求繁複的花哨流程，但在意整體畫面、音樂節奏、細節與設計一致性。你們希望婚禮乾淨、舒服、拒絕過度表演。",
-                suggestions: [
-                    "將流程極簡精化，確保每個環節銜接點乾淨俐落、不拖延",
-                    "要求主持詞留白，拒絕死板無謂的廢話填補",
-                    "整場音樂調性、軟裝燈光與場景轉換需維持極高審美一致性",
-                    "減少舞台強迫式遊戲，僅保留有美感及對新人有意義的主體儀式",
-                    "整體節奏規劃保留呼吸感，讓每位貴賓能優雅體悟整場饗宴"
-                ],
-                sunnyValue: "幫你們把簡單的流程做得有層次，不靠熱鬧堆疊，而靠節奏與細節讓人記得。"
-            },
-            "E": {
-                title: "穩定儀式型婚禮",
-                analysis: "你們希望婚禮保有正式感與尊崇感，也需貼心顧及長輩與家人的厚重期待。但你們同時也不希望整場婚禮顯得沉悶、傳統、或過於死板僵硬。",
-                suggestions: [
-                    "重要儀式與迎賓流程需要有條不紊，且充滿尊貴的秩序美學",
-                    "尊重長輩橋段細節，但經過精心包裝，精準不拖拉",
-                    "搭配穩重、控場力一流的精準主持風格，賦予長輩賓客安全感",
-                    "正式主體儀式圓滿完成後，安排較為溫和、無拘束的交談互動",
-                    "關鍵在於精巧轉場，避免嚴肅隆重的氣氛一路緊繃到底"
-                ],
-                sunnyValue: "幫你們在正式與放鬆之間取得平衡，讓長輩安心，也讓朋友覺得舒服。"
-            }
-        };
+      app.innerHTML = `
+        <div class="quiz">
+          <div class="progress-meta">
+            <span>Diagnostic Progress</span>
+            <strong>Step ${state.step + 1} / ${questions.length}</strong>
+          </div>
+          <div class="steps">${steps}</div>
+          <h2 class="question"><span style="color:var(--sage)">Q${state.step + 1}.</span> ${q.title}</h2>
+          <div class="options">${options}</div>
+          <div class="nav-row">
+            <button class="ghost-action" type="button" onclick="goBack()">餈?銝?憿?/button>
+            <button class="secondary-action" type="button" onclick="goNext()" ${currentAnswer ? "" : "disabled"}>
+              ${state.step === questions.length - 1 ? "?亦?蝯?" : "銝?憿?}
+            </button>
+          </div>
+        </div>
+      `;
+    }
 
-        // Tie-breaker priority: C > A > D > B > E
-        const priorityOrder = ["C", "A", "D", "B", "E"];
+    function renderResult() {
+      const result = resultsData[state.resultType || "C"];
+      app.innerHTML = `
+        <div class="result">
+          <div class="result-header">
+            <span class="eyebrow" style="margin-bottom:10px">Wedding Atmosphere Proposal</span>
+            <h1 class="result-title">${result.title}</h1>
+            <div class="brand-divider" style="margin:22px auto 0;font-size:18px">BE YOUR SUN</div>
+          </div>
+          <section class="section alt">
+            <h3>?唬犖蝢飛?寡釭 繚 Analysis</h3>
+            <p>${result.analysis}</p>
+          </section>
+          <section class="section">
+            <h3>撠惇????蝔遣霅?繚 Timeline</h3>
+            <ol class="timeline">${result.suggestions.map(item => `<li>${item}</li>`).join("")}</ol>
+          </section>
+          <section class="section alt">
+            <h3>??雿?孵?繚 BE YOUR SUN Value</h3>
+            <p>${result.sunnyValue}</p>
+          </section>
+          <div class="result-actions">
+            <a class="price-link" href="https://sunnyyeh-wedding.my.canva.site/price" target="_blank" rel="noopener noreferrer">??BE YOUR SUN ???批捆??孵</a>
+            <button class="secondary-action" id="downloadBtn" type="button" onclick="downloadPng()">頛詨撠惇蝯?瘞???(PNG)</button>
+            <button class="ghost-action" type="button" onclick="resetQuiz()">?閮箸</button>
+          </div>
+        </div>
+      `;
+    }
 
-        // State machine
-        let appState = {
-            step: -1, // -1: Intro page, 0 to 7: Active diagnostic questions, 8: Completed analysis report
-            answers: Array(8).fill(null),
-            isCompleted: false,
-            resultType: ""
-        };
+    function startQuiz() {
+      state.step = 0;
+      state.isCompleted = false;
+      saveState();
+      render();
+    }
 
-        // Storage Key
-        const STATE_STORAGE_KEY = 'be_your_sun_vibe_quiz_v2';
+    function selectOption(key) {
+      state.answers[state.step] = key;
+      saveState();
+      render();
+    }
 
-        // Load persistency state
-        function loadState() {
-            const saved = localStorage.getItem(STATE_STORAGE_KEY);
-            if (saved) {
-                try {
-                    const parsed = JSON.parse(saved);
-                    if (parsed && typeof parsed.step === 'number') {
-                        appState = parsed;
-                    }
-                } catch (e) {
-                    console.error("Local quiz state parsing failed", e);
-                }
-            }
+    function jumpTo(index) {
+      if (index <= state.step || state.answers[index - 1] || index === 0) {
+        state.step = index;
+        state.isCompleted = false;
+        saveState();
+        render();
+      } else {
+        showToast("隢??折?摨??那?瑯?);
+      }
+    }
+
+    function goBack() {
+      state.step = state.step > 0 ? state.step - 1 : -1;
+      state.isCompleted = false;
+      saveState();
+      render();
+    }
+
+    function goNext() {
+      if (!state.answers[state.step]) {
+        showToast("隢??豢?銝???);
+        return;
+      }
+      if (state.step < questions.length - 1) {
+        state.step += 1;
+      } else {
+        state.resultType = calculateResult();
+        state.step = questions.length;
+        state.isCompleted = true;
+      }
+      saveState();
+      render();
+    }
+
+    function calculateResult() {
+      const tally = { A: 0, B: 0, C: 0, D: 0, E: 0 };
+      state.answers.forEach(key => { if (key) tally[key] += 1; });
+      const max = Math.max(...Object.values(tally));
+      return priorityOrder.find(key => tally[key] === max) || "C";
+    }
+
+    function resetQuiz() {
+      state = { step: -1, answers: Array(8).fill(null), resultType: null, isCompleted: false };
+      saveState();
+      render();
+      showToast("雿?蝝?歇?蔭??);
+    }
+
+    async function downloadPng() {
+      const button = document.getElementById("downloadBtn");
+      const originalText = button.textContent;
+      button.disabled = true;
+      button.textContent = "甇??Ｙ? PNG...";
+
+      try {
+        const result = resultsData[state.resultType || "C"];
+        const canvas = buildResultCanvas(result);
+        const fileName = `BE_YOUR_SUN_憍旨瘞?閮箸_${result.title}.png`;
+        await saveCanvas(canvas, fileName);
+        showToast("PNG 撌脩????璈???乩?頛?隢?????葉?瑟??脣???);
+      } catch (error) {
+        console.error(error);
+        showToast("PNG ?Ｙ?憭望?嚗???芸?靽??恍嚗??鼠雿鋆蔭?詨捆?扼?);
+      } finally {
+        button.disabled = false;
+        button.textContent = originalText;
+      }
+    }
+
+    function buildResultCanvas(result) {
+      const width = 1080;
+      const height = 1920;
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext("2d");
+
+      ctx.fillStyle = "#F4F6F0";
+      ctx.fillRect(0, 0, width, height);
+      ctx.fillStyle = "#FFFFFF";
+      roundRect(ctx, 68, 68, width - 136, height - 136, 30, true);
+      ctx.strokeStyle = "rgba(143,168,130,.24)";
+      ctx.lineWidth = 3;
+      roundRect(ctx, 96, 96, width - 192, height - 192, 24, false);
+
+      drawCentered(ctx, "BE YOUR SUN", 150, 34, "#2E352B", "700", "Noto Serif TC");
+      drawCentered(ctx, "WEDDING ATMOSPHERE PROPOSAL", 196, 20, "#8FA882", "700", "Noto Sans TC", .22);
+      line(ctx, 456, 238, 624, 238, "rgba(143,168,130,.32)", 2);
+
+      drawCentered(ctx, "撠惇雿?憍旨??", 330, 24, "#8FA882", "700", "Noto Sans TC", .18);
+      drawWrappedCentered(ctx, result.title, 390, 780, 58, 1.18, "#2E352B", "900", "Noto Serif TC");
+
+      let y = 565;
+      y = drawCardSection(ctx, "?唬犖蝢飛?寡釭 繚 Analysis", result.analysis, y, "#FEFBF3");
+      y = drawCardSection(ctx, "撠惇????蝔遣霅?繚 Timeline", result.suggestions.map((item, index) => `${index + 1}. ${item}`).join("\n"), y + 22, "#FFFFFF");
+      y = drawCardSection(ctx, "??雿?孵?繚 BE YOUR SUN Value", result.sunnyValue, y + 22, "#FEFBF3");
+
+      line(ctx, 210, 1710, 870, 1710, "rgba(143,168,130,.18)", 2);
+      drawCentered(ctx, "霈?蝳桐??芣摰?瘚?嚗鋡急?????湔晷撠?, 1770, 26, "#2E352B", "600", "Noto Serif TC");
+      drawCentered(ctx, "IG: @sunny_yeh_wedding  繚  Atmosphere Report", 1832, 20, "rgba(46,53,43,.55)", "400", "Noto Sans TC", .08);
+      return canvas;
+    }
+
+    function drawCardSection(ctx, title, body, y, bgColor) {
+      const x = 128;
+      const w = 824;
+      const padding = 34;
+      const titleHeight = 40;
+      const lines = [];
+      body.split("\n").forEach(part => lines.push(...wrapText(ctx, part, w - padding * 2, 26, "Noto Sans TC", "400")));
+      const h = padding * 2 + titleHeight + lines.length * 40 + 10;
+
+      ctx.fillStyle = bgColor;
+      roundRect(ctx, x, y, w, h, 24, true);
+      ctx.strokeStyle = "rgba(143,168,130,.13)";
+      ctx.lineWidth = 2;
+      roundRect(ctx, x, y, w, h, 24, false);
+
+      ctx.fillStyle = "#2E352B";
+      ctx.font = `700 28px "Noto Serif TC", serif`;
+      ctx.fillText(title, x + padding, y + padding + 26);
+
+      ctx.fillStyle = "rgba(46,53,43,.78)";
+      ctx.font = `400 26px "Noto Sans TC", sans-serif`;
+      let textY = y + padding + titleHeight + 36;
+      lines.forEach(lineText => {
+        ctx.fillText(lineText, x + padding, textY);
+        textY += 40;
+      });
+      return y + h;
+    }
+
+    async function saveCanvas(canvas, fileName) {
+      const blob = await new Promise(resolve => canvas.toBlob(resolve, "image/png", 1));
+      if (!blob) throw new Error("Canvas blob failed");
+      const url = URL.createObjectURL(blob);
+
+      const isiOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+      if (navigator.canShare && navigator.canShare({ files: [new File([blob], fileName, { type: "image/png" })] })) {
+        try {
+          await navigator.share({ files: [new File([blob], fileName, { type: "image/png" })], title: "BE YOUR SUN 憍旨瘞?閮箸" });
+          setTimeout(() => URL.revokeObjectURL(url), 30000);
+          return;
+        } catch (error) {
+          if (error.name !== "AbortError") console.warn(error);
         }
+      }
 
-        // Save progress state
-        function saveState() {
-            localStorage.setItem(STATE_STORAGE_KEY, JSON.stringify(appState));
+      if (isiOS) {
+        window.open(url, "_blank");
+        setTimeout(() => URL.revokeObjectURL(url), 60000);
+        return;
+      }
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 30000);
+    }
+
+    function drawCentered(ctx, text, y, size, color, weight, family, letterSpacing = 0) {
+      ctx.fillStyle = color;
+      ctx.font = `${weight} ${size}px "${family}", sans-serif`;
+      if (!letterSpacing) {
+        ctx.textAlign = "center";
+        ctx.fillText(text, 540, y);
+        ctx.textAlign = "start";
+        return;
+      }
+      drawTextWithLetterSpacing(ctx, text, 540, y, letterSpacing * size, true);
+    }
+
+    function drawWrappedCentered(ctx, text, y, maxWidth, size, lineHeight, color, weight, family) {
+      const lines = wrapText(ctx, text, maxWidth, size, family, weight);
+      ctx.fillStyle = color;
+      ctx.font = `${weight} ${size}px "${family}", serif`;
+      ctx.textAlign = "center";
+      lines.forEach((lineText, index) => {
+        ctx.fillText(lineText, 540, y + index * size * lineHeight);
+      });
+      ctx.textAlign = "start";
+    }
+
+    function wrapText(ctx, text, maxWidth, size, family, weight) {
+      ctx.font = `${weight} ${size}px "${family}", sans-serif`;
+      const result = [];
+      let lineText = "";
+      [...text].forEach(char => {
+        const test = lineText + char;
+        if (ctx.measureText(test).width > maxWidth && lineText) {
+          result.push(lineText);
+          lineText = char;
+        } else {
+          lineText = test;
         }
+      });
+      if (lineText) result.push(lineText);
+      return result;
+    }
 
-        // Entirely wipe state & restart
-        function resetQuiz() {
-            appState = {
-                step: -1,
-                answers: Array(8).fill(null),
-                isCompleted: false,
-                resultType: ""
-            };
-            saveState();
-            renderApp();
-            showToast("作答紀錄已重置，歡迎重新開始氛圍診斷。");
-        }
+    function drawTextWithLetterSpacing(ctx, text, centerX, y, spacing, centered) {
+      const chars = [...text];
+      const total = chars.reduce((sum, char) => sum + ctx.measureText(char).width, 0) + spacing * (chars.length - 1);
+      let x = centered ? centerX - total / 2 : centerX;
+      chars.forEach(char => {
+        ctx.fillText(char, x, y);
+        x += ctx.measureText(char).width + spacing;
+      });
+    }
 
-        // Custom high-aesthetic HTML Toast Notification (avoids page freezing alert blockages)
-        function showToast(message) {
-            const toast = document.getElementById("custom-toast");
-            const toastMsg = document.getElementById("toast-message");
-            toastMsg.innerText = message;
-            toast.classList.remove("opacity-0", "pointer-events-none");
-            toast.classList.add("opacity-100");
-            setTimeout(() => {
-                toast.classList.remove("opacity-100");
-                toast.classList.add("opacity-0", "pointer-events-none");
-            }, 3000);
-        }
+    function roundRect(ctx, x, y, w, h, r, fill) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.arcTo(x + w, y, x + w, y + h, r);
+      ctx.arcTo(x + w, y + h, x, y + h, r);
+      ctx.arcTo(x, y + h, x, y, r);
+      ctx.arcTo(x, y, x + w, y, r);
+      ctx.closePath();
+      fill ? ctx.fill() : ctx.stroke();
+    }
 
-        // Calculate compiled result with tie-breaker priority ordering
-        function calculateAndCompileResult() {
-            const tally = { "A": 0, "B": 0, "C": 0, "D": 0, "E": 0 };
-            appState.answers.forEach(key => {
-                if (key) {
-                    tally[key] = (tally[key] || 0) + 1;
-                }
-            });
+    function line(ctx, x1, y1, x2, y2, color, width) {
+      ctx.strokeStyle = color;
+      ctx.lineWidth = width;
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.stroke();
+    }
 
-            // Find max score
-            let highestScore = 0;
-            for (const key in tally) {
-                if (tally[key] > highestScore) {
-                    highestScore = tally[key];
-                }
-            }
-
-            // Collect keys that share highest score
-            const potentialWinners = [];
-            for (const key in tally) {
-                if (tally[key] === highestScore) {
-                    potentialWinners.push(key);
-                }
-            }
-
-            // Decide winner based on tie-breaking rules
-            let winningType = "";
-            if (potentialWinners.length === 1) {
-                winningType = potentialWinners[0];
-            } else {
-                // Apply priorities order sequence (C > A > D > B > E)
-                for (let i = 0; i < priorityOrder.length; i++) {
-                    if (potentialWinners.includes(priorityOrder[i])) {
-                        winningType = priorityOrder[i];
-                        break;
-                    }
-                }
-            }
-
-            appState.resultType = winningType;
-            appState.isCompleted = true;
-            appState.step = 8;
-            saveState();
-        }
-
-        // Dynamic HTML App Renderer
-        function renderApp() {
-            const container = document.getElementById("app-container");
-            container.className = "fade-in w-full flex flex-col justify-between";
-
-            if (appState.step === -1) {
-                // ============================================
-                // INTRO LANDING SCREEN (With Premium Cover Image)
-                // ============================================
-                container.innerHTML = `
-                    <div class="text-center space-y-7 py-2 group">
-                        
-                        <!-- 🔗 專屬美式雜誌感主視覺封面圖（路徑鎖定為同目錄下的 cover.jpg） -->
-                        <div class="w-full h-[200px] sm:h-[240px] overflow-hidden rounded-xl border border-brand-sage/10 shadow-xs relative bg-brand-bg">
-                            <img src="cover.jpg" alt="BE YOUR SUN Wedding Atmosphere" class="w-full h-full object-cover transform group-hover:scale-[1.02] transition-transform duration-700" onerror="this.style.display='none'; this.parentNode.innerHTML='<div class=\'w-full h-full flex items-center justify-center text-xs text-brand-sage/40 tracking-widest italic font-serif\'>Please upload cover.jpg to GitHub directory</div>';">
-                        </div>
-
-                        <div class="space-y-3.5">
-                            <span class="text-xs uppercase tracking-[0.3em] text-brand-sage font-sans font-bold">Wedding Atmosphere Lab</span>
-                            <h1 class="font-serif text-3xl md:text-4xl text-brand-dark tracking-wide font-bold leading-tight">
-                                找到你們真正適合的<br>婚禮氛圍
-                            </h1>
-                            <div class="flex justify-center items-center space-x-3 my-2">
-                                <div class="h-[1px] w-8 bg-brand-sage/20"></div>
-                                <span class="font-serif text-brand-sage text-sm font-bold">BE YOUR SUN</span>
-                                <div class="h-[1px] w-8 bg-brand-sage/20"></div>
-                            </div>
-                        </div>
-                        
-                        <p class="text-brand-dark/80 text-sm leading-relaxed max-w-xl mx-auto font-sans font-light tracking-wide px-2">
-                            婚禮不只是流程安排，而是新人、賓客與現場感受一起形成的氛圍。<br class="hidden sm:inline">
-                            透過這份簡短診斷，整理你們適合的婚禮節奏、互動方式與現場感覺。
-                        </p>
-
-                        <!-- Brand guideline panel -->
-                        <div class="bg-brand-apricot/80 rounded-2xl p-5 max-w-xl mx-auto space-y-1.5 border border-brand-sage/10 text-left paper-shadow">
-                            <div class="flex items-center space-x-2 text-brand-sage text-xs tracking-widest font-bold uppercase font-sans mb-1">
-                                <span class="w-1.5 h-1.5 bg-brand-yellow rounded-full"></span>
-                                <span>Wedding Design Concept</span>
-                            </div>
-                            <p class="text-xs text-brand-dark/70 leading-relaxed font-light">
-                                無論是 <span class="text-brand-dark font-medium">戶外草地派對</span>，還是 <span class="text-brand-dark font-medium">高雅星級飯店宴會廳</span>。我們專為「追求自然鬆弛、拒絕制式流程」的新人設計。透過氛圍調度，讓任何空間都能擁有被感受到的溫暖、好玩與互動感。
-                            </p>
-                        </div>
-
-                        <div class="pt-3">
-                            <button onclick="startDiagnosticQuiz()" class="w-full sm:w-auto px-10 py-3.5 bg-brand-sage hover:bg-brand-forest text-white text-sm tracking-[0.2em] rounded-xl transition-all duration-300 shadow-sm hover:shadow-md transform hover:scale-[1.01]">
-                                開始診斷 Atmosphere Guide
-                            </button>
-                        </div>
-                    </div>
-                `;
-            } else if (appState.step >= 0 && appState.step < 8) {
-                // ============================================
-                // TIMELINE INTERACTIVE QUESTION SYSTEM
-                // ============================================
-                const qIndex = appState.step;
-                const activeQuestion = questions[qIndex];
-                const activeAnswer = appState.answers[qIndex];
-
-                // Generate Step Milestones Timeline nodes
-                let timelineNodesHTML = '';
-                for (let i = 0; i < 8; i++) {
-                    const isPassed = i < qIndex;
-                    const isActive = i === qIndex;
-                    
-                    let nodeStyle = "border-brand-sage/15 text-brand-dark/40 bg-white";
-                    if (isPassed) {
-                        nodeStyle = "border-brand-sage bg-brand-sage/15 text-brand-forest font-bold shadow-xs";
-                    } else if (isActive) {
-                        nodeStyle = "border-brand-sage bg-brand-sage text-white font-bold shadow-sm ring-4 ring-brand-sage/15";
-                    }
-
-                    timelineNodesHTML += `
-                        <div class="flex flex-col items-center relative z-10 cursor-pointer" onclick="jumpToProgressStep(${i})">
-                            <div class="w-8 h-8 rounded-full border flex items-center justify-center text-xs transition-all duration-300 ${nodeStyle}">
-                                ${i + 1}
-                            </div>
-                        </div>
-                    `;
-                }
-
-                container.innerHTML = `
-                    <div class="space-y-6">
-                        <!-- Step Interactive Progress Timeline -->
-                        <div class="space-y-3">
-                            <div class="flex justify-between items-center text-[10px] tracking-widest text-brand-dark/50 font-sans uppercase">
-                                <span>Diagnostic Progress</span>
-                                <span class="font-bold text-brand-sage">Step ${qIndex + 1} / 8</span>
-                            </div>
-                            
-                            <!-- Steps graphical timeline line representation -->
-                            <div class="relative py-2 px-1">
-                                <!-- Base line -->
-                                <div class="absolute top-[24px] left-4 right-4 h-[1.5px] bg-brand-sage/15 -translate-y-1/2 z-0"></div>
-                                <!-- Filled Progress representation -->
-                                <div class="absolute top-[24px] left-4 h-[1.5px] bg-brand-sage -translate-y-1/2 z-0 transition-all duration-300" style="width: ${((qIndex) / 7) * 94}%"></div>
-                                
-                                <div class="flex justify-between items-center">
-                                    ${timelineNodesHTML}
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Question Statement Block -->
-                        <div class="pt-2">
-                            <h2 class="font-serif text-lg md:text-xl text-brand-dark font-bold tracking-wide leading-relaxed">
-                                <span class="text-brand-sage font-serif italic mr-1">Q${qIndex + 1}.</span> ${activeQuestion.title}
-                            </h2>
-                        </div>
-
-                        <!-- Styled Options Selection Grid -->
-                        <div class="space-y-3" id="interactive-options-group">
-                            ${activeQuestion.options.map((opt) => {
-                                const isSelected = activeAnswer === opt.key;
-                                return `
-                                    <button onclick="commitOptionSelection('${opt.key}')" class="w-full text-left p-4 rounded-xl border ${isSelected ? 'border-brand-sage bg-brand-apricot text-brand-dark shadow-sm scale-[1.01]' : 'border-brand-sage/15 bg-white text-brand-dark'} hover:border-brand-sage hover:shadow-xs transition-all duration-300 text-sm flex items-center justify-between group">
-                                        <div class="flex items-center space-x-3.5 pr-2">
-                                            <span class="w-7 h-7 rounded-full border ${isSelected ? 'border-brand-sage bg-brand-sage text-white' : 'border-brand-sage/20 bg-white group-hover:border-brand-sage text-brand-dark/50'} flex items-center justify-center text-xs font-bold transition-all duration-300">
-                                                ${opt.key}
-                                            </span>
-                                            <span class="font-sans font-light tracking-wide text-brand-dark/90 transition-colors duration-200">${opt.text}</span>
-                                        </div>
-                                        ${isSelected ? `
-                                            <svg class="w-5 h-5 text-brand-sage flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                                            </svg>
-                                        ` : ''}
-                                    </button>
-                                `;
-                            }).join('')}
-                        </div>
-
-                        <!-- Custom Navigation Controls bar -->
-                        <div class="pt-5 border-t border-brand-sage/10 flex items-center justify-between">
-                            <button onclick="stepGoBackward()" class="px-4 py-2.5 text-xs text-brand-dark/60 hover:text-brand-dark transition-colors duration-200 tracking-wider flex items-center space-x-1.5 font-light">
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg>
-                                <span>返回上一題 Back</span>
-                            </button>
-                            
-                            <button onclick="stepGoForward()" ${activeAnswer ? '' : 'disabled class="opacity-30 cursor-not-allowed"'} id="control-btn-next" class="px-6 py-2.5 bg-brand-sage hover:bg-brand-forest text-white text-xs tracking-widest rounded-xl transition-all duration-300 flex items-center space-x-2">
-                                <span>${qIndex === 7 ? '分析氛圍報告 View Result' : '下一題 Next Step'}</span>
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg>
-                            </button>
-                        </div>
-                    </div>
-                `;
-            } else if (appState.step === 8 || appState.isCompleted) {
-                // ============================================
-                // EDITORIAL RESULTS ATMOSPHERE PROPOSAL
-                // ============================================
-                const resultType = appState.resultType || "C";
-                const matchedVibe = resultsData[resultType];
-
-                container.innerHTML = `
-                    <div class="space-y-8 fade-in">
-                        <!-- Result Header Profile styling -->
-                        <div class="text-center space-y-3 pb-6 border-b border-brand-sage/10">
-                            <span class="text-xs uppercase tracking-[0.25em] text-brand-sage font-sans font-bold">Wedding Atmosphere Proposal</span>
-                            <h1 class="font-serif text-3xl md:text-4xl text-brand-dark font-bold tracking-wide mt-1.5">
-                                ${matchedVibe.title}
-                            </h1>
-                            <div class="flex justify-center items-center space-x-2.5 my-1.5">
-                                <span class="h-[1px] w-4 bg-brand-sage/20"></span>
-                                <span class="text-[9px] text-brand-dark/50 tracking-[0.15em] font-sans uppercase">BE YOUR SUN · 量身美學時程報告</span>
-                                <span class="h-[1px] w-4 bg-brand-sage/20"></span>
-                            </div>
-                        </div>
-
-                        <!-- Part 1: 新人特質 -->
-                        <div class="space-y-2 bg-brand-apricot p-6 rounded-2xl border border-brand-sage/10 relative paper-shadow">
-                            <div class="absolute top-4 right-4 font-serif italic text-3xl text-brand-sage/15 font-bold select-none">01</div>
-                            <h3 class="font-serif text-base text-brand-dark tracking-wider font-bold border-b border-brand-sage/10 pb-2 flex items-center space-x-2">
-                                <span class="w-1.5 h-1.5 rounded-full bg-brand-sage"></span>
-                                <span>新人美學特質 · Analysis</span>
-                            </h3>
-                            <p class="text-sm text-brand-dark/80 leading-relaxed font-sans font-light pt-1.5">
-                                ${matchedVibe.analysis}
-                            </p>
-                        </div>
-
-                        <!-- Part 2: 流程建議 -->
-                        <div class="space-y-4 bg-white p-6 rounded-2xl border border-brand-sage/10 relative">
-                            <div class="absolute top-4 right-4 font-serif italic text-3xl text-brand-sage/15 font-bold select-none">02</div>
-                            <h3 class="font-serif text-base text-brand-dark tracking-wider font-bold border-b border-brand-sage/10 pb-2 flex items-center space-x-2">
-                                <span class="w-1.5 h-1.5 rounded-full bg-brand-sage"></span>
-                                <span>專屬時程與流程建議 · Timeline</span>
-                            </h3>
-                            
-                            <div class="relative pl-6 space-y-5 border-l border-dashed border-brand-sage/30 ml-2.5 pt-3">
-                                ${matchedVibe.suggestions.map((suggestion, index) => `
-                                    <div class="relative">
-                                        <span class="absolute -left-[30px] top-1.5 w-3 h-3 rounded-full bg-white border-2 border-brand-sage flex items-center justify-center">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-brand-sage"></span>
-                                        </span>
-                                        <div class="text-[10px] font-serif italic text-brand-sage tracking-wider uppercase mb-0.5 font-bold">Timeline Point 0${index + 1}</div>
-                                        <p class="text-xs text-brand-dark/85 font-sans font-light leading-relaxed">${suggestion}</p>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        </div>
-
-                        <!-- Part 3: Sunny 協助價值 -->
-                        <div class="space-y-2 bg-[#FEFBF3] p-6 rounded-2xl border border-amber-200/20 relative paper-shadow">
-                            <div class="absolute top-4 right-4 font-serif italic text-3xl text-brand-yellow/15 font-bold select-none">03</div>
-                            <h3 class="font-serif text-base text-brand-dark tracking-wider font-bold border-b border-brand-yellow/10 pb-2 flex items-center space-x-2">
-                                <span class="w-1.5 h-1.5 rounded-full bg-brand-yellow"></span>
-                                <span>光合作用價值 · BE YOUR SUN Value</span>
-                            </h3>
-                            <p class="text-sm text-brand-dark leading-relaxed font-medium pt-1.5">
-                                ${matchedVibe.sunnyValue}
-                            </p>
-                        </div>
-
-                        <!-- Premium Brand Slogan Bar -->
-                        <div class="text-center py-2 text-[10px] text-brand-dark/40 tracking-widest font-sans border-y border-brand-sage/10 max-w-xs mx-auto uppercase">
-                            Bespoke Wedding Atmosphere · Editorial Taste
-                        </div>
-
-                        <!-- Primary call-to-actions (精準對接 Canva 服務報價單) -->
-                        <div class="pt-6 border-t border-brand-sage/10 flex flex-col space-y-3.5">
-                            
-                            <!-- 🔗 官方服務報價單超連結 -->
-                            <a href="https://sunnyyeh-wedding.my.canva.site/price" target="_blank" rel="noopener noreferrer" class="w-full text-center p-4 bg-brand-sage hover:bg-brand-forest text-white rounded-xl transition-all duration-300 shadow-sm flex flex-col items-center justify-center hover:shadow-md transform hover:scale-[1.01] group">
-                                <div class="flex items-center space-x-2 text-xs tracking-[0.2em] font-sans font-bold">
-                                    <span>看 BE YOUR SUN 服務內容與報價單 ☀️</span>
-                                    <svg class="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                                    </svg>
-                                </div>
-                                <span class="text-[10px] text-white/70 tracking-wider font-sans font-light mt-1">看 Sunny 如何把這樣的氛圍，完美落實在你們的婚禮中</span>
-                            </a>
-
-                            <!-- Export High Definition image for instagram share -->
-                            <button id="btn-export-vibe-card" onclick="buildAndDownloadVibeCard()" class="w-full text-center py-3.5 border border-brand-sage/20 bg-white hover:bg-brand-bg text-brand-dark text-xs tracking-widest rounded-xl transition-all duration-300 flex items-center justify-center space-x-2 font-sans font-medium hover:border-brand-sage">
-                                <svg class="w-4 h-4 text-brand-sage" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                                </svg>
-                                <span>輸出專屬結果氛圍卡 (PNG)</span>
-                            </button>
-
-                            <!-- Restarter Button -->
-                            <div class="text-center pt-2">
-                                <button onclick="resetQuiz()" class="text-xs text-brand-dark/50 hover:text-brand-dark tracking-wider transition-all duration-200 uppercase font-sans font-light border-b border-dashed border-brand-sage/30 hover:border-brand-dark pb-0.5">
-                                    ← 重新開始診斷 Reset Diagnostic
-                                </button>
-                            </div>
-
-                        </div>
-                    </div>
-                `;
-            }
-        }
-
-        // Allows jump stepping backwards or forwards to completed questions
-        function jumpToProgressStep(index) {
-            if (index === appState.step) return;
-            if (index < appState.step || appState.answers[index] !== null || index === 0 || appState.answers[index - 1] !== null) {
-                appState.step = index;
-                saveState();
-                renderApp();
-            } else {
-                showToast("請依照順序點選填寫答案。");
-            }
-        }
-
-        // Activates quiz stepping
-        function startDiagnosticQuiz() {
-            appState.step = 0;
-            saveState();
-            renderApp();
-        }
-
-        // Commits options select state
-        function commitOptionSelection(key) {
-            appState.answers[appState.step] = key;
-            saveState();
-            renderApp();
-        }
-
-        // Progressive forward routing
-        function stepGoForward() {
-            if (appState.answers[appState.step] === null) {
-                showToast("請選擇一個選項以繼續診斷。");
-                return;
-            }
-            if (appState.step < 7) {
-                appState.step += 1;
-                saveState();
-                renderApp();
-            } else {
-                calculateAndCompileResult();
-                renderApp();
-            }
-        }
-
-        // Decisive backward routing
-        function stepGoBackward() {
-            if (appState.step > 0) {
-                appState.step -= 1;
-                saveState();
-                renderApp();
-            } else if (appState.step === 0) {
-                appState.step = -1;
-                saveState();
-                renderApp();
-            }
-        }
-
-        // Render result card into a gorgeous 9:16 Instagram Share template and download as high res PNG
-        function buildAndDownloadVibeCard() {
-            const btn = document.getElementById('btn-export-vibe-card');
-            const originalContents = btn.innerHTML;
-            
-            btn.innerHTML = `
-                <svg class="animate-spin h-4 w-4 text-brand-forest" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                <span>正在調配專屬美感卡片...</span>
-            `;
-            btn.disabled = true;
-
-            const resultType = appState.resultType || "C";
-            const currentResult = resultsData[resultType];
-
-            document.getElementById('card-type-title').innerText = currentResult.title;
-            document.getElementById('card-analysis').innerText = currentResult.analysis;
-            document.getElementById('card-sunny-value').innerText = currentResult.sunnyValue;
-
-            const listWrapper = document.getElementById('card-suggestions-container');
-            listWrapper.innerHTML = currentResult.suggestions.map((suggestion, idx) => `
-                <div class="relative">
-                    <span class="absolute -left-[24px] top-1 w-2.5 h-2.5 rounded-full bg-[#F4F6F0] border-2 border-[#8FA882] flex items-center justify-center">
-                        <span class="w-1 h-1 rounded-full bg-[#8FA882]"></span>
-                    </span>
-                    <p class="text-[11px] leading-relaxed text-[#2E352B]/85 font-sans font-light">
-                        <span class="font-serif italic font-bold text-[#8FA882] mr-1">Point 0${idx + 1}.</span>${suggestion}
-                    </p>
-                </div>
-            `).join('');
-
-            setTimeout(() => {
-                const targetNode = document.getElementById('capture-card');
-                
-                html2canvas(targetNode, {
-                    scale: 2,
-                    useCORS: true,
-                    backgroundColor: "#F4F6F0",
-                    logging: false
-                }).then(renderedCanvas => {
-                    try {
-                        const dlLink = document.createElement('a');
-                        dlLink.download = `BE_YOUR_SUN_婚禮氛圍診斷_${currentResult.title.replace(/\s+/g, '_')}.png`;
-                        dlLink.href = renderedCanvas.toDataURL('image/png');
-                        
-                        document.body.appendChild(dlLink);
-                        dlLink.click();
-                        document.body.removeChild(dlLink);
-                        
-                        showToast("🎉 專屬時程與氛圍卡已成功下載，歡迎分享至 Instagram！");
-                    } catch (err) {
-                        console.error("Canvas link generation failed", err);
-                        showToast("圖片下載失敗，建議直接使用截圖功能儲存畫面唷！");
-                    } finally {
-                        btn.innerHTML = originalContents;
-                        btn.disabled = false;
-                    }
-                }).catch(err => {
-                    console.error("html2canvas compile workflow error", err);
-                    showToast("圖片輸出錯誤，建議直接使用手機或電腦截圖！");
-                    btn.innerHTML = originalContents;
-                    btn.disabled = false;
-                });
-            }, 600);
-        }
-
-        window.onload = function() {
-            loadState();
-            renderApp();
-        };
-    </script>
+    render();
+  </script>
 </body>
 </html>
