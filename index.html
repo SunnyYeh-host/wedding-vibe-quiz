@@ -77,6 +77,26 @@
         .paper-shadow {
             box-shadow: 0 4px 20px -2px rgba(46, 53, 43, 0.05);
         }
+
+        /* 療癒系暖陽漸層 */
+        .ig-sun-gradient {
+            background: linear-gradient(135deg, #F59E0B 0%, #E95950 35%, #BC1888 75%, #8A3AB9 100%);
+        }
+
+        /* 暖陽呼吸微光特效 */
+        @keyframes sunGlow {
+            0%, 100% {
+                box-shadow: 0 0 12px rgba(245, 158, 11, 0.35), 0 4px 14px rgba(188, 24, 136, 0.2);
+                transform: translateY(0) scale(1);
+            }
+            50% {
+                box-shadow: 0 0 22px rgba(245, 158, 11, 0.65), 0 8px 24px rgba(188, 24, 136, 0.4);
+                transform: translateY(-4px) scale(1.03);
+            }
+        }
+        .sun-glow-animation {
+            animation: sunGlow 3.5s infinite ease-in-out;
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between overflow-x-hidden selection:bg-[#8FA882]/20">
@@ -218,6 +238,30 @@
         </div>
     </div>
 
+    <!-- 療癒系右下角浮動按鈕 (IG Direct Access Button) -->
+    <div class="fixed bottom-6 right-6 md:bottom-8 md:right-8 z-50 flex items-center group">
+        <!-- 漂浮優雅提示 Tooltip (Hover時自動浮現) -->
+        <span class="absolute right-16 bg-brand-dark/95 text-white text-[11px] tracking-wider px-3 py-1.5 rounded-lg opacity-0 translate-x-4 pointer-events-none transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 whitespace-nowrap shadow-md border border-white/10 font-sans font-light">
+            與 Sunny 聊聊 ☀️
+        </span>
+        
+        <!-- 主按鈕本體 -->
+        <a href="https://ig.me/m/sunny_yeh_wedding" target="_blank" rel="noopener noreferrer" class="w-12 h-12 md:w-14 md:h-14 rounded-full ig-sun-gradient sun-glow-animation flex items-center justify-center text-white relative transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-brand-yellow/50" aria-label="私訊 Sunny Instagram">
+            <!-- 太陽芒星微小點綴 (右上角) -->
+            <span class="absolute top-1 right-1 w-3.5 h-3.5 text-brand-yellow drop-shadow-[0_1px_4px_rgba(245,158,11,0.8)] animate-pulse">
+                <svg fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 0l2.5 8.5L23 11l-8.5 2.5L12 22l-2.5-8.5L1 11l8.5-2.5z"/>
+                </svg>
+            </span>
+            <!-- Instagram 簡約圖示 -->
+            <svg class="w-6 h-6 md:w-7 md:h-7 stroke-current fill-none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+            </svg>
+        </a>
+    </div>
+
     <script>
         // Formulated Questions (8 items with 5 answers mapped to Type keys)
         const questions = [
@@ -326,7 +370,7 @@
             },
             "B": {
                 title: "溫馨情感型婚禮",
-                analysis: "你們希望婚禮有情緒、有記憶點，不只是熱鬧吃飯。你們可能很重視家人、誓詞、感謝，或某些人生階段的轉換與沉澱。",
+                analysis: "你們希望婚禮有情緒、有記憶點，不只是熱鬧吃飯。你們可能很重視家人、誓詞、感謝， or 某些人生階段的轉換與沉澱。",
                 suggestions: [
                     "規劃溫暖且深藏巧思的誓詞或真心感謝父母橋段",
                     "家人、長輩的參與互動需要提前確認舒適度，不逼迫演出",
@@ -362,7 +406,7 @@
             },
             "E": {
                 title: "穩定儀式型婚禮",
-                analysis: "你們希望婚禮保有正式感與尊崇感，也需貼心顧及長輩與家人的厚重期待。但你們同時也不希望整場婚禮顯得沉悶、傳統、或過於死板僵硬。",
+                analysis: "你們希望婚禮保有正式感與尊崇感，也需貼心顧及長輩與家人的厚重期待。但你們同時也不希望整場婚禮顯得沉悶、傳統、 or 過於死板僵硬。",
                 suggestions: [
                     "重要儀式與迎賓流程需要有條不紊，且充滿尊貴的秩序美學",
                     "尊重長輩橋段細節，但經過精心包裝，精準不拖拉",
